@@ -17,9 +17,15 @@ const client = new Client({
 
 // MongoDB setup
 const mongoClient = new MongoClient(process.env.MONGODB_URI, {
+  serverApi: {
+    version: "1",
+    strict: true,
+    deprecationErrors: true,
+  },
   ssl: true,
   tls: true,
-  tlsAllowInvalidCertificates: true,
+  minPoolSize: 1,
+  maxPoolSize: 10,
 });
 let db, responses;
 
