@@ -16,7 +16,11 @@ const client = new Client({
 });
 
 // MongoDB setup
-const mongoClient = new MongoClient(process.env.MONGODB_URI);
+const mongoClient = new MongoClient(process.env.MONGODB_URI, {
+  ssl: true,
+  tls: true,
+  tlsAllowInvalidCertificates: true,
+});
 let db, responses;
 
 // Normalize text to handle different quote types and apostrophes
