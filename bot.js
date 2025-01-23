@@ -124,9 +124,12 @@ client.on("messageCreate", async (message) => {
   if (message.author.bot) return;
 
   const content = normalizeText(message.content);
+  console.log("Received message:", content);
 
   try {
-    if (content.match(/^(-|—|–)help$/)) {
+    // Updated regex patterns to be more lenient
+    if (content.match(/^[--—–]help\b/)) {
+      console.log("Help command triggered");
       await message.channel.send(`Commands:
 --add "trigger" "response" or with attachment
 --remove "trigger"
@@ -144,8 +147,10 @@ client.on("messageCreate", async (message) => {
       return;
     }
 
-    if (content.match(/^(-|—|–)add/)) {
+    if (content.match(/^[--—–]add\b/)) {
+      console.log("Add command triggered");
       const trigger = extractQuotedStrings(content)[0];
+      console.log("Extracted trigger:", trigger);
       if (!trigger) throw new Error("Invalid format");
       const result = await addResponse(message, trigger);
       await message.channel.send(result);
