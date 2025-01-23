@@ -128,18 +128,16 @@ client.on("messageCreate", async (message) => {
 
   try {
     if (content.startsWith("--help")) {
-      await message.channel.send(`Commands:
---add "trigger" "response" or with attachment
---remove "trigger"
---edit "trigger" "new_response" or with attachment
---list`);
+      await message.channel.send(
+        `Commands available:\n**1. --add "message" "response"**Adds a new message and its response.\n**2. --remove "message"**Removes a message and its response.\n**3. --edit "message" "new_response"**Edits the response of an existing message.\n**4. --list**List all registered responses.\n**5. --help**Displays this help message.`
+      );
       return;
     }
 
     if (content.startsWith("--list")) {
       const allResponses = await responses.find().toArray();
       const list = allResponses
-        .map(({ trigger, type }) => `${trigger} (${type})`)
+        .map(({ trigger, type }) => `- "${trigger}" (${type})`)
         .join("\n");
       await message.channel.send(`Responses:\n${list}`);
       return;
