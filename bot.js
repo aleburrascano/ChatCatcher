@@ -127,9 +127,7 @@ client.on("messageCreate", async (message) => {
   console.log("Received message:", content);
 
   try {
-    // Updated regex patterns to be more lenient
-    if (content.match(/^[--—–]help\b/)) {
-      console.log("Help command triggered");
+    if (content.startsWith("--help")) {
       await message.channel.send(`Commands:
 --add "trigger" "response" or with attachment
 --remove "trigger"
@@ -138,7 +136,7 @@ client.on("messageCreate", async (message) => {
       return;
     }
 
-    if (content.match(/^(-|—|–)list$/)) {
+    if (content.startsWith("--list")) {
       const allResponses = await responses.find().toArray();
       const list = allResponses
         .map(({ trigger, type }) => `${trigger} (${type})`)
@@ -147,17 +145,15 @@ client.on("messageCreate", async (message) => {
       return;
     }
 
-    if (content.match(/^[--—–]add\b/)) {
-      console.log("Add command triggered");
+    if (content.startsWith("--add")) {
       const trigger = extractQuotedStrings(content)[0];
-      console.log("Extracted trigger:", trigger);
       if (!trigger) throw new Error("Invalid format");
       const result = await addResponse(message, trigger);
       await message.channel.send(result);
       return;
     }
 
-    if (content.match(/^(-|—|–)remove/)) {
+    if (content.startsWith("--remove")) {
       const trigger = extractQuotedStrings(content)[0];
       if (!trigger) throw new Error("Invalid format");
       const result = await removeResponse(trigger);
@@ -165,7 +161,7 @@ client.on("messageCreate", async (message) => {
       return;
     }
 
-    if (content.match(/^(-|—|–)edit/)) {
+    if (content.startsWith("--edit")) {
       const trigger = extractQuotedStrings(content)[0];
       if (!trigger) throw new Error("Invalid format");
       const result = await editResponse(message, trigger);
@@ -173,7 +169,6 @@ client.on("messageCreate", async (message) => {
       return;
     }
 
-    // Check for triggers in message
     const matches = await checkMessages(content);
     for (const match of matches) {
       try {
@@ -200,7 +195,7 @@ client.on("ready", async () => {
   await connectDB();
 
   client.user.setPresence({
-    activities: [{ name: "Use --help", type: ActivityType.Custom }],
+    activities: [{ name: "Listening for --help", type: ActivityType.Custom }],
     status: "online",
   });
 });
