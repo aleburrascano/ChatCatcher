@@ -129,7 +129,7 @@ client.on("messageCreate", async (message) => {
   try {
     if (content.startsWith("--help")) {
       await message.channel.send(
-        `Commands available:\n**1. --add "message" "response"**Adds a new message and its response.\n**2. --remove "message"**Removes a message and its response.\n**3. --edit "message" "new_response"**Edits the response of an existing message.\n**4. --list**List all registered responses.\n**5. --help**Displays this help message.`
+        `Available commands:\n**1. --add "message" "response"**Adds a new message and its response.\n**2. --remove "message"**Removes a message and its response.\n**3. --edit "message" "new_response"**Edits the response of an existing message.\n**4. --list**List all registered responses.\n**5. --help**Displays this help message.`
       );
       return;
     }
@@ -145,7 +145,8 @@ client.on("messageCreate", async (message) => {
 
     if (content.startsWith("--add")) {
       const trigger = extractQuotedStrings(content)[0];
-      if (!trigger) throw new Error("Invalid format");
+      if (!trigger)
+        throw new Error(`\nProper Usage: --add "message" "response"`);
       const result = await addResponse(message, trigger);
       await message.channel.send(result);
       return;
@@ -153,7 +154,7 @@ client.on("messageCreate", async (message) => {
 
     if (content.startsWith("--remove")) {
       const trigger = extractQuotedStrings(content)[0];
-      if (!trigger) throw new Error("Invalid format");
+      if (!trigger) throw new Error(`\nProper Usage: --remove "message"`);
       const result = await removeResponse(trigger);
       await message.channel.send(result);
       return;
@@ -161,7 +162,8 @@ client.on("messageCreate", async (message) => {
 
     if (content.startsWith("--edit")) {
       const trigger = extractQuotedStrings(content)[0];
-      if (!trigger) throw new Error("Invalid format");
+      if (!trigger)
+        throw new Error(`\nProper Usage: --edit "message" "new_response"`);
       const result = await editResponse(message, trigger);
       await message.channel.send(result);
       return;
