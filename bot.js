@@ -169,6 +169,13 @@ client.on("messageCreate", async (message) => {
       return;
     }
 
+    if (content.startsWith("--say")) {
+      const response = extractQuotedStrings(content)[1];
+      if (!response) throw new Error(`\nProper Usage: --say "response"`);
+      await message.channel.send(response);
+      return;
+    }
+
     const matches = await checkMessages(content);
     for (const match of matches) {
       try {
